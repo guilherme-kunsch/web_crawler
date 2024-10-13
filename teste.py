@@ -1,46 +1,54 @@
 import requests
 from bs4 import BeautifulSoup
-from concurrent.futures import ThreadPoolExecutor
 
+def extrair_previsao(dia_classe):
+    previsao = {}
+    #aqui eu estou pegando toda class que tenha grid-item dia
+    dia_elemento = previsoes.find('li', class_=f'grid-item dia {dia_classe}')
+    if dia_elemento:
+        #aqui estou pegando as informações de cada li dentro do elemento pai que no caso é o UL
+        #para cada LI estou pegando a class específica que vai me trazer os dados
+        previsao['dia_semana'] = dia_elemento.find('span', class_='text-0').text.strip()
+        previsao['data'] = dia_elemento.find('span', class_='subtitle-m').text.strip()
+        
+        prob_chuva_elem = dia_elemento.find('span', class_='txt-strng probabilidad center')
+        previsao['prob_chuva'] = prob_chuva_elem.text.strip() if prob_chuva_elem else "N/A"
 
-# def scrape_promotions(url):
-#     try:
-#         headers = {
-#             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
-#         response = requests.get(url, headers=headers)
-#         if response.status_code == 200:
-#             soup = BeautifulSoup(response.text, 'html.parser')
-#             promotions = soup.find_all(class_="promotion-class")
-#             return [promo.get_text() for promo in promotions]
-#         else:
-#             return f"Erro ao acessar {url}: {response.status_code}"
-#     except Exception as e:
-#         return f"Falha ao acessar {url}: {str(e)}"
+        precipitacao_elem = dia_elemento.find('span', class_='changeUnitR')
+        previsao['precipitacao'] = precipitacao_elem.text.strip() if precipitacao_elem else "N/A"
 
-# urls = [
-#     "https://www.precopopular.com.br",
-#     "https://www.paguemenos.com.br",
-#     "https://www.santaluciadrogarias.com.br"
-# ]
+        temp_max_elem = dia_elemento.find('span', class_='max changeUnitT')
+        previsao['temp_max'] = temp_max_elem.text.strip() if temp_max_elem else "N/A"
 
+        temp_min_elem = dia_elemento.find('span', class_='min changeUnitT')
+        previsao['temp_min'] = temp_min_elem.text.strip() if temp_min_elem else "N/A"
 
-# def scrape_multiple_sites(urls):
-#     with ThreadPoolExecutor() as executor:
-#         results = executor.map(scrape_promotions, urls)
-#     return list(results)
+        velocidades = dia_elemento.find_all('span', class_='changeUnitW')
+        previsao['velocidade_min'] = velocidades[0].text.strip() if len(velocidades) > 0 else "N/A"
+        previsao['velocidade_max'] = velocidades[1].text.strip() if len(velocidades) > 1 else "N/A"
+        
+    return previsao
 
-
-# results = scrape_multiple_sites(urls)
-
-# for url, promotions in zip(urls, results):
-#     print(f"Promoções de {url}:\n", promotions)
-
-response = requests.get("https://www.paguemenos.com.br")
+response = requests.get("https://www.tempo.com/vitoria_espirito-santo-l13010.htm")
 content = response.content
 
 site = BeautifulSoup(content, 'html.parser')
 
-promocoes = site.find('a', attrs={'class': 'vtex-rich-text-0-x-link vtex-rich-text-0-x-link--menu-item_desktop vtex-rich-text-0-x-link--menu-item-1_desktop'})
+previsoes = site.find('ul', attrs={'class': 'grid-container-7 dias_w'})
 
+if previsoes:
+    dias_classes = ['d1 activo', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7']
 
-print(promocoes.prettify())
+    for dia_classe in dias_classes:
+        previsao = extrair_previsao(dia_classe)
+        if previsao:
+            print(f"Dia: {previsao['dia_semana']}")
+            print(f"Data: {previsao['data']}")
+            print(f"Probabilidade de chuva: {previsao['prob_chuva']}")
+            print(f"Precipitação: {previsao['precipitacao']}")
+            print(f"Temperatura Máxima: {previsao['temp_max']}")
+            print(f"Temperatura Mínima: {previsao['temp_min']}")
+            print(f"Velocidade do vento: {previsao['velocidade_min']} - {previsao['velocidade_max']} km/h")
+            print('---')
+else:
+    print("Elemento <ul> não encontrado.")
