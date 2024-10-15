@@ -35,20 +35,23 @@ content = response.content
 site = BeautifulSoup(content, 'html.parser')
 
 previsoes = site.find('ul', attrs={'class': 'grid-container-7 dias_w'})
+with open('previsoes_tempo.txt', 'w', encoding='utf-8') as file:
+    if previsoes:
+        dias_classes = ['d1 activo', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7']
 
-if previsoes:
-    dias_classes = ['d1 activo', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7']
+        for dia_classe in dias_classes:
+            previsao = extrair_previsao(dia_classe)
+            if previsao:
+                # Escreve a previsão no arquivo
+                file.write(f"Dia: {previsao['dia_semana']}\n")
+                file.write(f"Data: {previsao['data']}\n")
+                file.write(f"Probabilidade de chuva: {previsao['prob_chuva']}\n")
+                file.write(f"Precipitação: {previsao['precipitacao']}\n")
+                file.write(f"Temperatura Máxima: {previsao['temp_max']}\n")
+                file.write(f"Temperatura Mínima: {previsao['temp_min']}\n")
+                file.write(f"Velocidade do vento: {previsao['velocidade_min']} - {previsao['velocidade_max']} km/h\n")
+                file.write('---\n')
+    else:
+        file.write("Elemento <ul> não encontrado.\n")
 
-    for dia_classe in dias_classes:
-        previsao = extrair_previsao(dia_classe)
-        if previsao:
-            print(f"Dia: {previsao['dia_semana']}")
-            print(f"Data: {previsao['data']}")
-            print(f"Probabilidade de chuva: {previsao['prob_chuva']}")
-            print(f"Precipitação: {previsao['precipitacao']}")
-            print(f"Temperatura Máxima: {previsao['temp_max']}")
-            print(f"Temperatura Mínima: {previsao['temp_min']}")
-            print(f"Velocidade do vento: {previsao['velocidade_min']} - {previsao['velocidade_max']} km/h")
-            print('---')
-else:
-    print("Elemento <ul> não encontrado.")
+print("Previsões salvas no arquivo 'previsoes_tempo.txt'.")
