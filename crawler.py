@@ -1,5 +1,7 @@
 import requests
+import os
 from bs4 import BeautifulSoup
+from datetime import datetime
 
 def extrair_previsao(dia_classe):
     previsao = {}
@@ -55,3 +57,44 @@ with open('previsoes_tempo.txt', 'w', encoding='utf-8') as file:
         file.write("Elemento <ul> não encontrado.\n")
 
 print("Previsões salvas no arquivo 'previsoes_tempo.txt'.")
+
+
+#aqui vamos gravar um log para mostrar que deu tudo certo e também se der erro
+with open('execution_log.txt', 'a', encoding='utf-8') as log_file:
+    log_file.write("Script executado em: " + str(datetime.now()) + "\n")
+
+response = requests.get("https://www.tempo.com/vitoria_espirito-santo-l13010.htm")
+if response.status_code == 200:
+    site = BeautifulSoup(response.content, 'html.parser')
+    previsoes = site.find('ul', attrs={'class': 'grid-container-7 dias_w'})
+
+    previsao_directory = 'previsoes'
+    if not os.path.exists(previsao_directory):
+        os.makedirs(previsao_directory)
+
+    # Defina o nome do arquivo de previsão com o caminho correto
+    now = datetime.now()
+    filename = os.path.join(previsao_directory, f"{now.strftime('%d_%m_%H%M')}.txt")
+
+    with open(filename, 'w', encoding='utf-8') as file:
+        if previsoes:
+            dias_classes = ['d1 activo', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7']
+
+            for dia_classe in dias_classes:
+                previsao = extrair_previsao(dia_classe)
+                if previsao:
+                    file.write(f"Dia: {previsao['dia_semana']}\n")
+                    file.write(f"Data: {previsao['data']}\n")
+                    file.write(f"Probabilidade de chuva: {previsao['prob_chuva']}\n")
+                    file.write(f"Precipitação: {previsao['precipitacao']}\n")
+                    file.write(f"Temperatura Máxima: {previsao['temp_max']}\n")
+                    file.write(f"Temperatura Mínima: {previsao['temp_min']}\n")
+                    file.write(f"Velocidade do vento: {previsao['velocidade_min']} - {previsao['velocidade_max']} km/h\n")
+                    file.write('---\n')
+        else:
+            file.write("Elemento <ul> não encontrado.\n")
+else:
+    with open('execution_log.txt', 'a', encoding='utf-8') as log_file:
+        log_file.write(f"Erro na requisição: {response.status_code}\n")
+
+print("Previsões salvas no arquivo com o nome formatado.")
