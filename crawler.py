@@ -56,7 +56,7 @@ with open('previsoes_tempo.txt', 'w', encoding='utf-8') as file:
     else:
         file.write("Elemento <ul> não encontrado.\n")
 
-print("Previsões salvas no arquivo 'previsoes_tempo.txt'.")
+print("Previsões salvas na pasta 'previsoes'.")
 
 
 #aqui vamos gravar um log para mostrar que deu tudo certo e também se der erro
@@ -72,7 +72,6 @@ if response.status_code == 200:
     if not os.path.exists(previsao_directory):
         os.makedirs(previsao_directory)
 
-    # Defina o nome do arquivo de previsão com o caminho correto
     now = datetime.now()
     filename = os.path.join(previsao_directory, f"{now.strftime('%d_%m_%H%M')}.txt")
 
