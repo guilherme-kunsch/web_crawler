@@ -1,0 +1,2 @@
+Previsões salvas na pasta 'previsoes'.
+Previsões salvas no arquivo com o nome formatado.

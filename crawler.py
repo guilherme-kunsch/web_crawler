@@ -68,7 +68,7 @@ if response.status_code == 200:
     site = BeautifulSoup(response.content, 'html.parser')
     previsoes = site.find('ul', attrs={'class': 'grid-container-7 dias_w'})
 
-    previsao_directory = 'previsoes'
+    previsao_directory = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'previsoes')
     if not os.path.exists(previsao_directory):
         os.makedirs(previsao_directory)
 
