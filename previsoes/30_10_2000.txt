@@ -1,0 +1,56 @@
+Dia: Hoje
+Data: 30 Out.
+Probabilidade de chuva: 90%
+Precipitação: 12 mm
+Temperatura Máxima: 25°
+Temperatura Mínima: 22°
+Velocidade do vento: 21 - 36 km/h
+---
+Dia: Amanhã
+Data: 31 Out.
+Probabilidade de chuva: N/A
+Precipitação: N/A
+Temperatura Máxima: 27°
+Temperatura Mínima: 21°
+Velocidade do vento: 27 - 46 km/h
+---
+Dia: Sexta
+Data: 1 Nov.
+Probabilidade de chuva: 40%
+Precipitação: 0.5 mm
+Temperatura Máxima: 26°
+Temperatura Mínima: 21°
+Velocidade do vento: 18 - 33 km/h
+---
+Dia: Sábado
+Data: 2 Nov.
+Probabilidade de chuva: 50%
+Precipitação: 0.3 mm
+Temperatura Máxima: 26°
+Temperatura Mínima: 20°
+Velocidade do vento: 16 - 31 km/h
+---
+Dia: Domingo
+Data: 3 Nov.
+Probabilidade de chuva: 80%
+Precipitação: 7.4 mm
+Temperatura Máxima: 27°
+Temperatura Mínima: 21°
+Velocidade do vento: 20 - 35 km/h
+---
+Dia: Segunda
+Data: 4 Nov.
+Probabilidade de chuva: 90%
+Precipitação: 4.1 mm
+Temperatura Máxima: 27°
+Temperatura Mínima: 21°
+Velocidade do vento: 23 - 41 km/h
+---
+Dia: Terça
+Data: 5 Nov.
+Probabilidade de chuva: 80%
+Precipitação: 2 mm
+Temperatura Máxima: 27°
+Temperatura Mínima: 21°
+Velocidade do vento: 22 - 40 km/h
+---
